@@ -11,9 +11,16 @@ def file_is_exist(path):
     return result
 
 
-def get_opened_current_sheet(path):
+def get_current_file(path):
+    file = openpyxl.load_workbook(path)
+    return file
+
+
+def get_current_sheet(path):
     file = openpyxl.load_workbook(path)
     current_sheet = file.active
+
+    return current_sheet
 
 
 def get_excel_data_or_none(path):

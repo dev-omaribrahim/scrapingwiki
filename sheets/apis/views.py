@@ -6,7 +6,10 @@ from rest_framework.renderers import TemplateHTMLRenderer, BrowsableAPIRenderer,
 from rest_framework.response import Response
 from rest_framework import status
 from .serializers import ExcelDataSerializer
-from sheets.utils.shortcuts import get_excel_data_or_none, search_value_in_column, file_is_exist
+from sheets.utils.shortcuts import (
+    get_excel_data_or_none, search_value_in_column,
+    file_is_exist, get_current_sheet, get_current_file
+)
 import pandas as pd
 import openpyxl
 import os
@@ -44,6 +47,7 @@ class ExcelListCreateAPIView(APIView):
             serializer = ExcelDataSerializer(data=requested_data)
             if serializer.is_valid():
 
+                # current_sheet = get_current_sheet(file_path)
                 last_row = current_sheet.max_row + 1
                 current_sheet["A" + str(last_row)].value = requested_data["ranking"]
                 current_sheet["B" + str(last_row)].value = requested_data["novel"]
@@ -73,13 +77,9 @@ class ExcelDetailAPIView(APIView):
 
         if file_is_exist(file_path):
             excel_data = get_excel_data_or_none(file_path)
-            # row_number = search_value_in_column(current_sheet, str(index), column="A")
 
-            # if row_number:
             try:
                 data = excel_data[index]
-                # print("excel ==>", excel_data)
-                # print("data ==>", data)
 
                 return Response(
                     {"data": data},
@@ -105,13 +105,13 @@ class ExcelDetailAPIView(APIView):
 
             if serializer.is_valid():
 
-                # file_open = openpyxl.load_workbook(file_path)
-                # active_sheet = file_open.active
-                #
-                # row_number = search_value_in_column(active_sheet, str(index), column="A")
-                row_number = search_value_in_column(current_sheet, str(index), column="A")
+                file_reload = openpyxl.load_workbook(file_path)
+                current_sheet_reload = file_reload.active
+
+                row_number = search_value_in_column(current_sheet_reload, str(index), column="A")
 
                 if row_number:
+
                     current_sheet["A" + str(row_number)] = requested_data["ranking"]
                     current_sheet["B" + str(row_number)] = requested_data["novel"]
                     current_sheet["C" + str(row_number)] = requested_data["author"]
@@ -143,8 +143,10 @@ class ExcelDetailAPIView(APIView):
 
             if row_number:
                 current_sheet.delete_rows(row_number)
+
                 file.save(file_path)
                 file.close()
+
                 return Response("Deleted", status=status.HTTP_204_NO_CONTENT)
             else:
                 return Response("Row Not Found !", status=status.HTTP_404_NOT_FOUND)
