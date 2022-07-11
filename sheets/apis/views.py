@@ -139,7 +139,9 @@ class ExcelDetailAPIView(APIView):
 
         if file_is_exist(file_path):
 
-            row_number = search_value_in_column(current_sheet, str(index), column="A")
+            file_reload = openpyxl.load_workbook(file_path)
+            current_sheet_reload = file_reload.active
+            row_number = search_value_in_column(current_sheet_reload, str(index), column="A")
 
             if row_number:
                 current_sheet.delete_rows(row_number)
