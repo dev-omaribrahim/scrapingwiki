@@ -16,7 +16,6 @@ import json
 file_path = os.path.join(settings.BASE_DIR, "excel_files/data.xlsx")
 file = openpyxl.load_workbook(file_path)
 current_sheet = file.active
-# excel_data = get_excel_data_or_none(file_path)
 
 
 class ExcelListCreateAPIView(APIView):
@@ -74,17 +73,21 @@ class ExcelDetailAPIView(APIView):
 
         if file_is_exist(file_path):
             excel_data = get_excel_data_or_none(file_path)
-            row_number = search_value_in_column(current_sheet, str(index), column="A")
+            # row_number = search_value_in_column(current_sheet, str(index), column="A")
 
-            if row_number:
+            # if row_number:
+            try:
                 data = excel_data[index]
+                # print("excel ==>", excel_data)
+                # print("data ==>", data)
 
                 return Response(
                     {"data": data},
                     status=status.HTTP_200_OK
                 )
-            else:
-                return Response("Row Not Found !", status=status.HTTP_404_NOT_FOUND)
+
+            except KeyError:
+                return Response("Record Not Found !", status=status.HTTP_404_NOT_FOUND)
 
         else:
             return Response(
@@ -102,6 +105,10 @@ class ExcelDetailAPIView(APIView):
 
             if serializer.is_valid():
 
+                # file_open = openpyxl.load_workbook(file_path)
+                # active_sheet = file_open.active
+                #
+                # row_number = search_value_in_column(active_sheet, str(index), column="A")
                 row_number = search_value_in_column(current_sheet, str(index), column="A")
 
                 if row_number:
@@ -122,7 +129,6 @@ class ExcelDetailAPIView(APIView):
 
             else:
                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
         else:
             return Response(
                 "File Not Found !",

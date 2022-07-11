@@ -1,5 +1,6 @@
 from django.conf import settings
 from django.urls import reverse_lazy
+import openpyxl
 import pandas as pd
 import os
 
@@ -8,6 +9,11 @@ def file_is_exist(path):
     result = os.path.exists(path)
     print(result)
     return result
+
+
+def get_opened_current_sheet(path):
+    file = openpyxl.load_workbook(path)
+    current_sheet = file.active
 
 
 def get_excel_data_or_none(path):
