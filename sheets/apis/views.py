@@ -6,7 +6,7 @@ from rest_framework.renderers import TemplateHTMLRenderer, BrowsableAPIRenderer,
 from rest_framework.response import Response
 from rest_framework import status
 from .serializers import ExcelDataSerializer
-from sheets.utils.shortcuts import get_excel_data_or_none, search_value_in_column
+from sheets.utils.shortcuts import get_excel_data_or_none, search_value_in_column, file_is_exist
 import pandas as pd
 import openpyxl
 import os
@@ -16,7 +16,7 @@ import json
 file_path = os.path.join(settings.BASE_DIR, "excel_files/data.xlsx")
 file = openpyxl.load_workbook(file_path)
 current_sheet = file.active
-excel_data = get_excel_data_or_none(file_path)
+# excel_data = get_excel_data_or_none(file_path)
 
 
 class ExcelListCreateAPIView(APIView):
@@ -25,7 +25,8 @@ class ExcelListCreateAPIView(APIView):
 
     def get(self, request, pk=None):
 
-        if excel_data is not None:
+        if file_is_exist(file_path):
+            excel_data = get_excel_data_or_none(file_path)
 
             return Response(
                 {"data": excel_data}, status=status.HTTP_200_OK,
@@ -33,13 +34,13 @@ class ExcelListCreateAPIView(APIView):
 
         else:
             return Response(
-                {"Error": "Something Wrong Happened!"},
-                status=status.HTTP_400_BAD_REQUEST
+                "File Not Found !",
+                status=status.HTTP_404_NOT_FOUND
             )
 
     def post(self, request):
 
-        if excel_data:
+        if file_is_exist(file_path):
             requested_data = request.data
             serializer = ExcelDataSerializer(data=requested_data)
             if serializer.is_valid():
@@ -62,8 +63,8 @@ class ExcelListCreateAPIView(APIView):
                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         else:
             return Response(
-                {"Error": "Something Wrong Happened!"},
-                status=status.HTTP_400_BAD_REQUEST
+                "File Not Found !",
+                status=status.HTTP_404_NOT_FOUND
             )
 
 
@@ -71,8 +72,8 @@ class ExcelDetailAPIView(APIView):
 
     def get(self, request, index):
 
-        if excel_data:
-
+        if file_is_exist(file_path):
+            excel_data = get_excel_data_or_none(file_path)
             row_number = search_value_in_column(current_sheet, str(index), column="A")
 
             if row_number:
@@ -87,15 +88,15 @@ class ExcelDetailAPIView(APIView):
 
         else:
             return Response(
-                {"Error": "Something Wrong Happened!"},
-                status=status.HTTP_400_BAD_REQUEST
+                "File Not Found !",
+                status=status.HTTP_404_NOT_FOUND
             )
 
     def put(self, request, index):
 
         requested_data = request.data
 
-        if excel_data:
+        if file_is_exist(file_path):
 
             serializer = ExcelDataSerializer(data=requested_data)
 
@@ -124,13 +125,13 @@ class ExcelDetailAPIView(APIView):
 
         else:
             return Response(
-                {"Error": "Something Wrong Happened!"},
-                status=status.HTTP_400_BAD_REQUEST
+                "File Not Found !",
+                status=status.HTTP_404_NOT_FOUND
             )
 
     def delete(self, request, index):
 
-        if excel_data:
+        if file_is_exist(file_path):
 
             row_number = search_value_in_column(current_sheet, str(index), column="A")
 
@@ -143,8 +144,8 @@ class ExcelDetailAPIView(APIView):
                 return Response("Row Not Found !", status=status.HTTP_404_NOT_FOUND)
         else:
             return Response(
-                {"Error": "Something Wrong Happened!"},
-                status=status.HTTP_400_BAD_REQUEST
+                "File Not Found !",
+                status=status.HTTP_404_NOT_FOUND
             )
 
 

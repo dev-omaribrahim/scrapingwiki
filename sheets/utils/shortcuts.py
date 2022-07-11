@@ -4,6 +4,12 @@ import pandas as pd
 import os
 
 
+def file_is_exist(path):
+    result = os.path.exists(path)
+    print(result)
+    return result
+
+
 def get_excel_data_or_none(path):
     try:
         excel_data = pd.read_excel(path)
