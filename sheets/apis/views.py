@@ -140,6 +140,7 @@ class ExcelDetailAPIView(APIView):
 
             excel_data = get_excel_data_or_none(file_path)
             ranking = str(int(excel_data[index]["الترتيب"]))
+
             row_number = search_value_in_column(current_sheet, ranking, column="A")
 
             if row_number:
