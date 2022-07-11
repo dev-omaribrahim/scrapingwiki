@@ -105,10 +105,9 @@ class ExcelDetailAPIView(APIView):
 
             if serializer.is_valid():
 
-                file_reload = openpyxl.load_workbook(file_path)
-                current_sheet_reload = file_reload.active
-
-                row_number = search_value_in_column(current_sheet_reload, str(index), column="A")
+                excel_data = get_excel_data_or_none(file_path)
+                ranking = str(int(excel_data[index]["الترتيب"]))
+                row_number = search_value_in_column(current_sheet, ranking, column="A")
 
                 if row_number:
 
@@ -139,9 +138,9 @@ class ExcelDetailAPIView(APIView):
 
         if file_is_exist(file_path):
 
-            file_reload = openpyxl.load_workbook(file_path)
-            current_sheet_reload = file_reload.active
-            row_number = search_value_in_column(current_sheet_reload, str(index), column="A")
+            excel_data = get_excel_data_or_none(file_path)
+            ranking = str(int(excel_data[index]["الترتيب"]))
+            row_number = search_value_in_column(current_sheet, ranking, column="A")
 
             if row_number:
                 current_sheet.delete_rows(row_number)
