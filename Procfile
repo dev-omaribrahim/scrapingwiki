@@ -1,2 +1,2 @@
 release: python manage.py migrate
-web: gunicorn scraping_project.wsgi --preload --log-file -
+web: gunicorn scrapingwiki.wsgi --preload --log-file -
