@@ -15,7 +15,6 @@ import openpyxl
 import os
 
 
-
 file_path = os.path.join(settings.BASE_DIR, "excel_files/data.xlsx")
 file = openpyxl.load_workbook(file_path)
 current_sheet = file.active
