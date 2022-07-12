@@ -43,7 +43,8 @@ class ExcelListCreateAPIView(APIView):
         }
     """
 
-    renderer_classes = (BrowsableAPIRenderer, JSONRenderer, TemplateHTMLRenderer)
+    renderer_classes = (JSONRenderer,)
+    # renderer_classes = (BrowsableAPIRenderer, JSONRenderer, TemplateHTMLRenderer)
 
     def get(self, request, pk=None):
 
