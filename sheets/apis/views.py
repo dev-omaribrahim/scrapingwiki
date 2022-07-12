@@ -23,6 +23,26 @@ current_sheet = file.active
 
 class ExcelListCreateAPIView(APIView):
 
+    """
+    List And Create View For Excel Data (GET & POST)
+    Example For Post Request Data *request body is writen in english fields to ease usability* :
+        {
+            "ranking": "107",
+
+            "novel": "test create",
+
+            "author": "omar",
+
+            "country": "egypt",
+
+            "novel_link": "https://ar.wikipedia.org/wiki/%D8%B5%D9%86%D8%B9_%D8%A7%D9%84%D9%84%D9%87_%D8%A5%D8%A8%D8%B1%D8%A7%D9%87%D9%8A%D9%85",
+
+            "author_link": "https://ar.wikipedia.org/wiki/%D9%85%D8%B5%D8%B1",
+
+            "country_link": "https://ar.wikipedia.org/wiki/%D9%85%D8%B5%D8%B1"
+        }
+    """
+
     renderer_classes = (BrowsableAPIRenderer, JSONRenderer, TemplateHTMLRenderer)
 
     def get(self, request, pk=None):
@@ -72,6 +92,29 @@ class ExcelListCreateAPIView(APIView):
 
 
 class ExcelDetailAPIView(APIView):
+    """
+    Detail view for Excel Row Data (
+    GET => Search and get by data index,
+    PUT => Convert index to Ranking and update with it,
+    DELETE => Convert index to Ranking and update with it
+    )
+    Example For PUT Request Data *request body is writen in english fields to ease usability* :
+        {
+            "ranking": "107",
+
+            "novel": "test create",
+
+            "author": "omar",
+
+            "country": "egypt",
+
+            "novel_link": "https://ar.wikipedia.org/wiki/%D8%B5%D9%86%D8%B9_%D8%A7%D9%84%D9%84%D9%87_%D8%A5%D8%A8%D8%B1%D8%A7%D9%87%D9%8A%D9%85",
+
+            "author_link": "https://ar.wikipedia.org/wiki/%D9%85%D8%B5%D8%B1",
+
+            "country_link": "https://ar.wikipedia.org/wiki/%D9%85%D8%B5%D8%B1"
+        }
+    """
 
     def get(self, request, index):
 

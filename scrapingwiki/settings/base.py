@@ -49,6 +49,7 @@ INSTALLED_APPS = [
 
     # Local Apps
     'sheets.apps.SheetsConfig',
+    'covers_generator.apps.CoversGeneratorConfig',
 
     # 3rd Parties
     'rest_framework',
@@ -70,7 +71,7 @@ ROOT_URLCONF = 'scrapingwiki.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, "templates")],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
