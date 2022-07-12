@@ -36,13 +36,3 @@ df = pd.DataFrame(data, columns=columns)
 
 df.to_excel("data.xlsx", index=False)
 
-
-dict_data = pd.read_excel("data.xlsx")
-rec = dict_data.to_dict("index")
-
-import json
-
-final = json.dumps(rec, ensure_ascii=False).encode('utf8')
-print(final)
-# with open(r'test.txt', 'w') as fp:
-#     fp.write(str(rec))
