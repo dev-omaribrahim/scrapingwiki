@@ -43,9 +43,6 @@ class ExcelListCreateAPIView(APIView):
         }
     """
 
-    renderer_classes = (JSONRenderer,)
-    # renderer_classes = (BrowsableAPIRenderer, JSONRenderer, TemplateHTMLRenderer)
-
     def get(self, request, pk=None):
 
         if file_is_exist(file_path):
